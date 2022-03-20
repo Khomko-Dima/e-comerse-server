@@ -1,7 +1,6 @@
 import express,{Express} from 'express'
 import {Server} from 'http'
 import { ExeptionFilter } from './errors/exeption.filter';
-import { LoggerService } from './logger/logger.service';
 import { UserController } from './users/users.controller';
 import { ILogger } from './logger/logger.interfece';
 export class App {
