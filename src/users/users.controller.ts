@@ -6,6 +6,8 @@ import { ILogger } from '../logger/logger.interfece';
 import { TYPES } from '../types';
 import 'reflect-metadata';
 import { IUsersController } from './users.controller.interface';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegistrDto } from './dto/user-registr.dto';
 @injectable()
 export class UserController extends BaseController implements IUsersController {
 	constructor(@inject(TYPES.ILogger) private loggerServise: ILogger) {
@@ -15,10 +17,12 @@ export class UserController extends BaseController implements IUsersController {
 			{ path: '/login', method: 'post', func: this.login },
 		]);
 	}
-	login(req: Request, res: Response, next: NextFunction): void {
+	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
+		console.log(req.body)
 		next(new HTTPError(401, 'Ошибка авторизации', 'login'));
 	}
-	register(req: Request, res: Response, next: NextFunction): void {
+	register(req: Request<{}, {}, UserRegistrDto>, res: Response, next: NextFunction): void {
+		console.log(req.body)
 		this.ok(res, 'register');
 	}
 }
