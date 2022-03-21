@@ -1,0 +1,34 @@
+[
+  {
+    "id": "0495070c-9c91-4610-9421-ef7734f7bab8",
+    "firstName": "admin",
+    "lastName": "admin",
+    "password": "admin",
+    "email": "admin@gmail.com",
+    "role": "admin"
+  },
+  {
+    "id": "c6c43956-38ee-4ed8-bfc4-5e7d1faf8fc8",
+    "firstName": "Jhon",
+    "lastName": "Frenks",
+    "password": "123123",
+    "email": "jhontest@gmail.com",
+    "role": "user"
+  },
+  {
+    "id": "c6c43956-38ee-4ed8-bfc4-5e7d1asdaf8fc8",
+    "firstName": "Maria",
+    "lastName": "Smith",
+    "password": "123123",
+    "email": "mariasmt@gmail.com",
+    "role": "user"
+  },
+  {
+    "id": "c6c43sas1956-38ee-4ed8-bfc4-5e7d1faf8fc8",
+    "firstName": "Tom",
+    "lastName": "Marks",
+    "password": "123123",
+    "email": "tommarks@gmail.com",
+    "role": "user"
+  }
+]
