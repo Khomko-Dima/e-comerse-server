@@ -5,7 +5,7 @@ import { UserController } from './users/users.controller';
 import { ILogger } from './logger/logger.interfece';
 import { inject, injectable } from 'inversify';
 import { TYPES } from './types';
-import {json} from 'body-parser'
+import { json } from 'body-parser';
 import 'reflect-metadata';
 
 @injectable()
@@ -36,7 +36,7 @@ export class App {
 	}
 
 	public async init(): Promise<void> {
-		this.useMiddleware()
+		this.useMiddleware();
 		this.useRoutes();
 		this.useExeptionsFilters();
 		this.server = this.app.listen(this.port);
