@@ -4,7 +4,7 @@ export class UserRegisterDto {
 	@IsEmail({}, {message: 'Неверно указан Email'})
 	email: string;
 
-	@IsString({message: 'Не указан пароль'})
+	@IsString({message: 'Неверно указан пароль'})
 	password: string;
 
 	@IsString({message: 'Не указано имя'})
