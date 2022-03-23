@@ -2,8 +2,8 @@ import { UserModel } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import { User } from "./user.entity";
 import { IUserRepository } from "./users.repository.interface";
-import { TYPES } from './../types';
-import { PrismaService } from './../common/prisma.service';
+import { TYPES } from "../types";
+import { PrismaService } from "../common/prisma.service";
 
 @injectable()
 export class UsersRepository implements IUserRepository {

@@ -7,9 +7,10 @@ import { json } from 'body-parser';
 import 'reflect-metadata';
 import { IConfigService } from "./config/config.service.interface";
 import { IExeptionFilter } from "./errors/exeption.filter.interface";
-import { UserController } from "./users/users.controller";
 import { PrismaService } from './common/prisma.service';
 import { AuthMiddleware } from "./common/auth.middleware";
+import { UserController } from "./users/users.controller";
+import { ProductsController } from "./products/products.controller";
 
 @injectable()
 export class App {
@@ -19,10 +20,13 @@ export class App {
 
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
-		@inject(TYPES.UserController) private userController: UserController,
 		@inject(TYPES.ExeptionFilter) private exeptionFilter: IExeptionFilter,
+
 		@inject(TYPES.ConfigService) private configService: IConfigService,
 		@inject(TYPES.PrismaService) private prismaService: PrismaService,
+
+		@inject(TYPES.UserController) private userController: UserController,
+		@inject(TYPES.ProductsController) private productsController: ProductsController,
 	) {
 		this.app = express();
 		this.port = 8000;
@@ -36,11 +40,13 @@ export class App {
 
 	useRoutes(): void {
 		this.app.use('/users', this.userController.router);
+		this.app.use('/product', this.productsController.router);
 	}
 
 	useExeptionFilters(): void {
 		this.app.use(this.exeptionFilter.catch.bind(this.exeptionFilter));
 	}
+
 
 	public async init(): Promise<void> {
 		this.useMiddleware();

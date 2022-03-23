@@ -71,7 +71,7 @@ export class UserController extends BaseController implements IUserController {
 				secret,
 				{algorithm: 'HS256'},
 				(err, token) => {
-					if (err)reject(err)
+					if (err) reject(err)
 					resolve(token as string)
 				}
 			);
