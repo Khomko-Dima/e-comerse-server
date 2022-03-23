@@ -25,13 +25,13 @@ export class ProductsController extends BaseController implements IProductsContr
 				func: this.create,
 				middlewares: [
 					new ValidateMiddleware(ProductCreateDto),
-					// new AuthGuard()
+					new AuthGuard()
 				]
 			},
 		]);
 	}
-	async create({body}: Request<{}, {}, ProductCreateDto>, res: Response, next: NextFunction): Promise<void> {
-		const result = await this.productsService.createProduct(body)
+	create({body}: Request<{}, {}, ProductCreateDto>, res: Response, next: NextFunction): void {
+		const result = this.productsService.createProduct(body)
 		this.loggerService.log('Продукт создан')
 		if (!result) {
 			return next(new HTTPError(422, 'Не удалось создать продукт'))

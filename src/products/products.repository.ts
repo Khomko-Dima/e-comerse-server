@@ -5,18 +5,16 @@ import { injectable } from "inversify";
 
 @injectable()
 export class ProductsRepository implements IProductsRepository {
-    constructor() {}
-    create(product: Product): boolean {
-      console.log('asd', product);
+    private path: string
+    constructor() {
+      this.path = process.cwd() + '/db/db.json';
+    }
+    create({id, price, title, category, img}: Product): boolean {
       try {
-        const path = process.cwd() + '/db/test.json'
-        console.log(process.cwd());
-        console.log(process.cwd() + '/db/test.json');
-        const productsFile = readFileSync(path, 'utf8')
-        console.log(productsFile);
-        const products = JSON.parse(productsFile)
-        products.push(product)
-        writeFileSync('test.json', JSON.stringify(products))
+        const productsFile = readFileSync(this.path, 'utf8');
+        const products = JSON.parse(productsFile);
+        products.push({id, price, title, category, img});
+        addToFile(this.path, JSON.stringify(products))
         return true
       } catch (e) {
         return false
@@ -24,9 +22,9 @@ export class ProductsRepository implements IProductsRepository {
     }
     delete(id: string): boolean {
       try {
-        const productsFile = readFileSync('test.json', 'utf8')
+        const productsFile = readFileSync(this.path, 'utf8')
         const products = JSON.parse(productsFile)
-        writeFileSync('test.json', JSON.stringify(products.filter((p: Product) => p.id !== id)))
+        addToFile(this.path, JSON.stringify(products.filter((p: Product) => p.id !== id)))
         return true
       } catch (e) {
         return false
@@ -34,3 +32,8 @@ export class ProductsRepository implements IProductsRepository {
     }
 
 }
+function addToFile(path: string, data: string) {
+  writeFileSync(path, data)
+}
+
+

@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class ProductCreateDto {
 
@@ -7,4 +7,11 @@ export class ProductCreateDto {
 
 	@IsNumber()
 	prise: number
+
+	@IsArray()
+	category: string[]
+
+	@IsOptional()
+	@IsString()
+	img?: string
 }
