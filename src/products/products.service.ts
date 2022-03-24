@@ -5,6 +5,7 @@ import { IProductsRepository } from "./products.repository.interface";
 import { Product } from "./product.entity";
 import { ProductCreateDto } from "./dto/product-create.dto";
 import { ProductDeleteDto } from "./dto/product-delete.dto";
+import { ProductGetDto } from "./dto/product-get.dto";
 
 @injectable()
 export class ProductsService implements IProductsService {
@@ -21,5 +22,13 @@ export class ProductsService implements IProductsService {
     const res = this.productsRepository.delete(id)
     if (!res) return null
     else return true
+  }
+  getProducts({page, pageSize}: Omit<ProductGetDto, 'product'>) : ProductGetDto | null {
+    const result = this.productsRepository.getAll(page, pageSize)
+    if (!result) return null
+    return result
+  }
+  getProduct(id: string): Product | undefined {
+    return this.productsRepository.getById(id)
   }
 }
