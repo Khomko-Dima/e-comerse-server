@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, NextFunction, Request, Response } from "express";
 import { Server } from 'http';
 import { ILogger } from './logger/logger.interfece';
 import { inject, injectable } from 'inversify';
@@ -33,6 +33,10 @@ export class App {
 	}
 
 	useMiddleware(): void {
+		this.app.use(function (req: Request, res: Response, next: NextFunction) {
+			res.setHeader('Access-Control-Allow-Headers', '*');
+			next();
+		})
 		this.app.use(json());
 		const authMiddleware = new AuthMiddleware(this.configService.get('SECRET_JWT'));
 		this.app.use(authMiddleware.execute.bind(authMiddleware));
