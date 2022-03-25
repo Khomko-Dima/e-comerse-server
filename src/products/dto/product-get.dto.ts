@@ -14,4 +14,10 @@ export class ProductGetDto {
 
 	@IsNumber()
 	pageSize: number
+
+	filterData?: {
+		searchString?: string
+		category?: string[]
+		price?: [number, number]
+	}
 }

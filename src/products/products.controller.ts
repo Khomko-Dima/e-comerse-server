@@ -1,5 +1,5 @@
 import { BaseController } from '../common/base.controller';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, query, Request, Response } from "express";
 import { inject, injectable } from 'inversify';
 import { ILogger } from '../logger/logger.interfece';
 import { TYPES } from '../types';
@@ -12,6 +12,8 @@ import { IProductsService } from "./products.service.interface";
 import { HTTPError } from "../errors/http-error.class";
 import { ProductDeleteDto } from "./dto/product-delete.dto";
 import { ProductGetDto } from "./dto/product-get.dto";
+import { ProductGetByIdDto } from "./dto/product-getById.dto";
+import { ProductGetByIdsDto } from "./dto/product-getByIds.dto";
 
 @injectable()
 export class ProductsController extends BaseController implements IProductsController {
@@ -46,10 +48,17 @@ export class ProductsController extends BaseController implements IProductsContr
 				]
 			},{
 				path: '/product',
-				method: 'get',
-				func: this.get,
+				method: 'post',
+				func: this.getOne,
 				middlewares: [
-					new ValidateMiddleware(ProductGetDto),
+					new ValidateMiddleware(ProductGetByIdDto),
+				]
+			},{
+				path: '/products',
+				method: 'post',
+				func: this.getByIds,
+				middlewares: [
+					new ValidateMiddleware(ProductGetByIdsDto),
 				]
 			},
 		]);
@@ -60,7 +69,7 @@ export class ProductsController extends BaseController implements IProductsContr
 		if (!result) {
 			return next(new HTTPError(422, 'Не удалось создать продукт'))
 		}
-		this.ok(res, {});
+		this.created(res);
 	}
 	delete({body}: Request<{}, {}, ProductDeleteDto>, res: Response, next: NextFunction): void {
 		const result = this.productsService.deleteProduct(body)
@@ -77,13 +86,19 @@ export class ProductsController extends BaseController implements IProductsContr
 		}
 		this.ok(res, result);
 	}
-	getById({params}: Request<{}, {}, {}>, res: Response, next: NextFunction): void {
-		const result = this.productsService.getProduct(req.params?.id)
+	getByIds({body}: Request<{}, {}, ProductGetByIdsDto>, res: Response, next: NextFunction): void {
+		const result = this.productsService.getProductsById(body.ids)
+		if (!result) {
+			return next(new HTTPError(422, 'Не удалось получить продукты'))
+		}
+		this.ok(res, result);
+	}
+	getOne({body}: Request<{}, {}, ProductGetByIdDto>, res: Response, next: NextFunction): void {
+		const result = this.productsService.getProduct(body.id)
 		if (!result) {
 			return next(new HTTPError(422, 'Не удалось получить продукт'))
 		}
 		this.ok(res, result);
 	}
-
 }
 

@@ -29,26 +29,48 @@ export class ProductsRepository implements IProductsRepository {
         return false
       }
     }
-  getAll(page: number = 0, pageSize: number = 10): ProductGetDto {
-    const products = getFileData(this.path);
+  getAll(params: Omit<ProductGetDto, 'content' | 'totalCount' >): ProductGetDto {
+    let products = getFileData(this.path);
+
+    if (params.filterData) {
+      if (params.filterData.price?.length) {
+        const start = params.filterData.price[0]
+        const end = params.filterData.price[1]
+        products = products.filter((el: Product) => el.price >= start && el.price <= end)
+      }
+      if (params.filterData.searchString) {
+        const value = params.filterData.searchString.trim();
+        if (value !== '') {
+          const searchString = new RegExp(value, 'i')
+          products = products.filter((el: Product) => searchString.test(el.title))
+        }
+      }
+      if (params.filterData.category?.length) {
+        products = products.filter((el: Product) => {
+          if (!params.filterData) return;
+          return contains(el.category as string[], params.filterData.category as string[])
+        })
+      }
+    }
 
     const totalCount = products.length;
-
-    const from = page === 0 ? 0 : page * pageSize;
-    const to = from + pageSize >= totalCount ? totalCount : from + pageSize;
-
+    const from = params.page === 0 ? 0 : params.page * params.pageSize;
+    const to = from + params.pageSize >= totalCount ? totalCount : from + params.pageSize;
     const content = products.slice(from, to)
-
     return {
       content,
-      pageSize,
+      pageSize: params.pageSize,
       totalCount,
-      page
+      page: params.page
     }
   }
   getById(id: string): Product | undefined {
     const products = getFileData(this.path);
     return products.find((product: Product) => product.id === id)
+  }
+  getByIds(ids: string[]): Pick<ProductGetDto, 'content'> | [] {
+    let products = getFileData(this.path);
+    return products.filter((el: Product) => ids.includes(el.id))
   }
 
 }
@@ -60,4 +82,9 @@ function getFileData(path: string) {
   return JSON.parse(productsFile);
 }
 
-
+function contains(where: string[], what: string[]){
+  for(let i=0; i < what.length; i++){
+    if(where.indexOf(what[i]) == -1) return false;
+  }
+  return true;
+}

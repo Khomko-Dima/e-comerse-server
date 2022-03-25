@@ -23,12 +23,16 @@ export class ProductsService implements IProductsService {
     if (!res) return null
     else return true
   }
-  getProducts({page, pageSize}: Omit<ProductGetDto, 'product'>) : ProductGetDto | null {
-    const result = this.productsRepository.getAll(page, pageSize)
+  getProducts(params: Omit<ProductGetDto, 'content' | 'totalCount' >) : ProductGetDto | null {
+    const result = this.productsRepository.getAll(params)
     if (!result) return null
     return result
   }
   getProduct(id: string): Product | undefined {
     return this.productsRepository.getById(id)
+  }
+  getProductsById(ids: string[]): Pick<ProductGetDto, 'content'> | [] {
+    const result = this.productsRepository.getByIds(ids)
+    return result
   }
 }
